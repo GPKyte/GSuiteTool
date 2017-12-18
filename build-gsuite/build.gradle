@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'GSuiteTool'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+version = '3.1.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.google.api-client:google-api-client:1.20.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.20.0'
+    compile 'com.google.apis:google-api-services-admin-directory:directory_v1-rev53-1.20.0'
+    testCompile 'junit:junit:4.12'
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs = ["src/test/java"]
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    //enable compilation in a separate daemon process
+    options.fork = true
+
+    //enable incremental compilation
+    //options.incremental = true
+    if (project.hasProperty("more")) {
+        options.compilerArgs += ["-Xlint:unchecked"]
+    }
+}
+
+run {
+    if (project.hasProperty("myArgs")) {
+        args Eval.me(myArgs)
+    }
+}
