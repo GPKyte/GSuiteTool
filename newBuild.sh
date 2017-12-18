@@ -6,10 +6,11 @@ DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 if [[ -f ${DIR}/build-gsuite/src/main/resources/client_secret.json ]]; then
     rm -rf ${DIR}/gsuite-?.?.?/
     cd ${DIR}/build-gsuite/ &&
+    gradle run -P myArgs="['--reset']" &&
     gradle clean &&
     gradle buildNeeded &&
     cd ${DIR}/build-gsuite/build/distributions/ &&
-    mv ${DIR}/build-gsuite/build/distributions/gsuite*.zip ${DIR}/ &&
+    mv gsuite*.zip ${DIR}/ &&
     cd ${DIR} &&
     unzip -q ${DIR}/gsuite*.zip &&
     rm ${DIR}/gsuite*.zip ||
